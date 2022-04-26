@@ -1,0 +1,36 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="Sex_male <= 0.5\ngini = 0.441\nsamples = 183\nvalue = [60, 123]"] ;
+1 [label="Fare <= 10.481\ngini = 0.127\nsamples = 88\nvalue = [6, 82]"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="gini = 0.0\nsamples = 2\nvalue = [2, 0]"] ;
+1 -> 2 ;
+3 [label="Age <= 3.0\ngini = 0.089\nsamples = 86\nvalue = [4, 82]"] ;
+1 -> 3 ;
+4 [label="gini = 0.0\nsamples = 1\nvalue = [1, 0]"] ;
+3 -> 4 ;
+5 [label="Age <= 49.5\ngini = 0.068\nsamples = 85\nvalue = [3, 82]"] ;
+3 -> 5 ;
+6 [label="gini = 0.028\nsamples = 71\nvalue = [1, 70]"] ;
+5 -> 6 ;
+7 [label="gini = 0.245\nsamples = 14\nvalue = [2, 12]"] ;
+5 -> 7 ;
+8 [label="Age <= 17.5\ngini = 0.491\nsamples = 95\nvalue = [54, 41]"] ;
+0 -> 8 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+9 [label="gini = 0.0\nsamples = 8\nvalue = [0, 8]"] ;
+8 -> 9 ;
+10 [label="Age <= 43.0\ngini = 0.471\nsamples = 87\nvalue = [54, 33]"] ;
+8 -> 10 ;
+11 [label="Fare <= 7.85\ngini = 0.499\nsamples = 48\nvalue = [25, 23]"] ;
+10 -> 11 ;
+12 [label="gini = 0.0\nsamples = 6\nvalue = [6, 0]"] ;
+11 -> 12 ;
+13 [label="gini = 0.495\nsamples = 42\nvalue = [19, 23]"] ;
+11 -> 13 ;
+14 [label="Age <= 47.5\ngini = 0.381\nsamples = 39\nvalue = [29, 10]"] ;
+10 -> 14 ;
+15 [label="gini = 0.0\nsamples = 11\nvalue = [11, 0]"] ;
+14 -> 15 ;
+16 [label="gini = 0.459\nsamples = 28\nvalue = [18, 10]"] ;
+14 -> 16 ;
+}
