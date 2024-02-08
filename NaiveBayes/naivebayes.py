@@ -13,7 +13,7 @@ class NaiveBayesFilter(ClassifierMixin):
     '''
 
     def __init__(self):
-        return 
+        return
 
     def fit(self, X, y):
         '''
@@ -26,20 +26,23 @@ class NaiveBayesFilter(ClassifierMixin):
         '''
         #get the unique words in the training data
         all_words = X.str.split().sum()
-        unique_words =sorted(list(set(all_words)))
+        unique_words = sorted(list(set(all_words)))
         #new dataframe containing word counts
         self.data = pd.DataFrame(0, columns=unique_words, index=['ham', 'spam'])
         #number of words in spam and ham
-        self.N_counts = {'ham':sum(y == 'ham') ,
-                         'spam': sum(y == 'spam')}
+        self.N_counts = {'ham'  : sum(y == 'ham') ,
+                         'spam' : sum(y == 'spam')}
         #total number of words
         self.N_samples = len(y)
         #probability of spam and ham
-        self.P_class = { 'ham': self.N_counts['ham'] / self.N_samples,
-                         'spam': self.N_counts['spam'] / self.N_samples }
+        self.P_class = {'ham'  : self.N_counts['ham'] / self.N_samples,
+                        'spam' : self.N_counts['spam'] / self.N_samples}
+
         #now we count the number of times each word occurs in spam and ham
         for SH, message in zip(y, X):
             for word in message.strip().split():
+                # if the word is empty we skip the word, spaces shouldn't contribute
+                # to spam/ham filtering
                 if word == " ":
                     continue
                 else:
@@ -48,8 +51,8 @@ class NaiveBayesFilter(ClassifierMixin):
 
 
         #total number of times words (including mutliplicites) occur in spam/ham
-        self.N_occurences = {'ham': sum(self.data.loc['ham']),
-                             'spam': sum(self.data.loc['spam'])}
+        self.N_occurences = {'ham'  : sum(self.data.loc['ham']),
+                             'spam' : sum(self.data.loc['spam'])}
         return self
 
     def predict_proba(self, X):
@@ -123,7 +126,7 @@ class NaiveBayesFilter(ClassifierMixin):
 
         Parameters:
             X (pd.Series)(N,): messages to classify
-        
+
         Return:
             (ndarray)(N,2): Probability each message is ham, spam
                 0 column is ham
@@ -147,7 +150,7 @@ class NaiveBayesFilter(ClassifierMixin):
                 for i, word in enumerate(unique_words):
                     #in the cases that the word is in the training set calculate it here
                     try:
-                        current_prob += int(words.count(word)) * np.log( self.data.loc[class_, word] / self.N_occurences[class_] + tol)
+                        current_prob += int(words.count(word)) * np.log(self.data.loc[class_, word] / self.N_occurences[class_] + tol)
                     #otherwise the corresponding log probabability is 0
                     except KeyError:
                         continue
@@ -165,18 +168,18 @@ class NaiveBayesFilter(ClassifierMixin):
 
         Parameters:
             X (pd.Series)(N,): messages to classify
-        
+
         Return:
             (ndarray)(N,): label for each message
         '''
 
-        #create label max for indices
-        label_map = {0:'ham', 1:'spam'}
-        #get probabilities
+        # create label max for indices
+        label_map = {0: 'ham', 1: 'spam'}
+        # get probabilities
         probabilities = self.predict_log_proba(X)
-        #get corresponding indices
-        indexes = np.argmax(probabilities, axis = 1)
-        #return array of predictions.
+        # get corresponding indices
+        indexes = np.argmax(probabilities, axis=1)
+        # return array of predictions.
         return np.array([label_map[index] for index in indexes])
 
     def score_log(self, X, y):
@@ -189,7 +192,7 @@ class NaiveBayesFilter(ClassifierMixin):
 class PoissonBayesFilter(ClassifierMixin):
     '''
     A Naive Bayes Classifier that sorts messages in to spam or ham.
-    This classifier assumes that words are distributed like 
+    This classifier assumes that words are distributed like
     Poisson random variables
     '''
 
@@ -209,23 +212,23 @@ class PoissonBayesFilter(ClassifierMixin):
         Parameters:
             X (pd.Series): training data
             y (pd.Series): training labels
-        
+
         Returns:
             self: this is an optional method to train
         '''
         all_words = X.str.split().sum()
         unique_words =sorted(list(set(all_words)))
-        #new dataframe containing word counts
+        # new dataframe containing word counts
         self.data = pd.DataFrame(0, columns=unique_words, index=['ham', 'spam'])
-        #number of words in spam and ham
+        # number of words in spam and ham
         self.N_counts = {'ham':sum(y == 'ham') ,
                          'spam': sum(y == 'spam')}
-        #total number of words
+        # total number of words
         self.N_samples = len(y)
-        #probability of spam and ham
+        # probability of spam and ham
         self.P_class = { 'ham': self.N_counts['ham'] / self.N_samples,
                          'spam': self.N_counts['spam'] / self.N_samples }
-        #now we count the number of times each word occurs in spam and ham
+        # now we count the number of times each word occurs in spam and ham
         for SH, message in zip(y, X):
             for word in message.strip().split():
                 if word == " ":
@@ -235,9 +238,9 @@ class PoissonBayesFilter(ClassifierMixin):
                     self.data.loc[SH, word] += 1
 
 
-        #total number of times words (including mutliplicites) occur in spam/ham
-        self.N_occurences = { 'ham' : sum(self.data.loc['ham']),
-                             'spam' : sum(self.data.loc['spam']) }
+        # total number of times words (including mutliplicites) occur in spam/ham
+        self.N_occurences = {'ham': sum(self.data.loc['ham']),
+                             'spam' : sum(self.data.loc['spam'])}
 
         N_k_ham = self.N_occurences['ham']
         N_k_spam = self.N_occurences['spam']
@@ -267,7 +270,7 @@ class PoissonBayesFilter(ClassifierMixin):
 
         Parameters:
             X (pd.Series)(N,): messages to classify
-        
+
         Return:
             (ndarray)(N,2): Probability each message is ham or spam
                 column 0 is ham, column 1 is spam 
@@ -306,7 +309,7 @@ class PoissonBayesFilter(ClassifierMixin):
 
         Parameters:
             X (pd.Series)(N,): messages to classify
-        
+
         Return:
             (ndarray)(N,): label for each message
         '''
